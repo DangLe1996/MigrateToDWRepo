@@ -1,4 +1,4 @@
-namespace MigrateToDW1
+namespace TimeCalculator
 {
     using System;
     using System.Data.Entity;

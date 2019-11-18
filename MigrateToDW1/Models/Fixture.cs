@@ -1,4 +1,4 @@
-namespace MigrateToDW1
+namespace TimeCalculator
 {
     using System;
     using System.Collections.Generic;
@@ -52,9 +52,7 @@ namespace MigrateToDW1
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CategoryAtFixture> CategoryAtFixtures { get; set; }
 
-        
-
-
+       
 
 
 

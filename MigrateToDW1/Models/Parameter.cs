@@ -1,4 +1,4 @@
-namespace MigrateToDW1
+namespace TimeCalculator
 {
     using System;
     using System.Collections.Generic;
@@ -36,41 +36,41 @@ namespace MigrateToDW1
         public virtual ICollection<Timing_Option> Timing_Option { get; set; }
 
 
-        public override bool Equals(object obj)
-        {
-            Parameter q = obj as Parameter;
-            return q != null && q.Code == this.Code;
+        //public override bool Equals(object obj)
+        //{
+        //    Parameter q = obj as Parameter;
+        //    return q != null && q.Code == this.Code;
 
-        }
+        //}
 
-        public override int GetHashCode()
-        {
-            return this.Code.GetHashCode();
+        //public override int GetHashCode()
+        //{
+        //    return this.Code.GetHashCode();
 
-        }
-        public static int GetHashCode(ICollection<Parameter> array)
-        {
-            // if non-null array then go into unchecked block to avoid overflow
-            if (array != null)
-            {
-                unchecked
-                {
-                    int hash = 17;
+        //}
+        //public static int GetHashCode(ICollection<Parameter> array)
+        //{
+        //    // if non-null array then go into unchecked block to avoid overflow
+        //    if (array != null)
+        //    {
+        //        unchecked
+        //        {
+        //            int hash = 17;
 
-                    // get hash code for all items in array
-                    foreach (var item in array)
-                    {
-                        hash = hash * 23 + ((item != null) ? item.GetHashCode() : 0);
-                    }
+        //            // get hash code for all items in array
+        //            foreach (var item in array)
+        //            {
+        //                hash = hash * 23 + ((item != null) ? item.GetHashCode() : 0);
+        //            }
 
-                    return hash;
-                }
-            }
+        //            return hash;
+        //        }
+        //    }
 
-            // if null, hash code is zero
-            return 0;
+        //    // if null, hash code is zero
+        //    return 0;
 
 
-        }
+        //}
     }
 }

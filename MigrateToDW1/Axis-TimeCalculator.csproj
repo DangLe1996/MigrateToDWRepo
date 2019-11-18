@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E3C8E5F1-D75C-40B7-81C0-B19146AB5A88}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>MigrateToDW1</RootNamespace>
-    <AssemblyName>MigrateToDW1</AssemblyName>
+    <RootNamespace>TimeCalculator</RootNamespace>
+    <AssemblyName>Axis-TimeCalculator</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,6 +33,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AXISAutomation">
+      <HintPath>..\..\Axis-ProdTimeDB\bin\Debug\AXISAutomation.dll</HintPath>
+    </Reference>
+    <Reference Include="DBConnection">
+      <HintPath>..\..\Axis-ProdTimeDB\bin\Debug\DBConnection.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -66,11 +72,14 @@
     <Compile Include="SSRS.cs" />
     <Compile Include="Models\Timing_Option.cs" />
     <Compile Include="Models\Timing_WorkStations.cs" />
+    <Compile Include="TimeCalculator.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Input.csv" />
     <None Include="packages.config" />
+    <None Include="ProductEpicor.csv" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

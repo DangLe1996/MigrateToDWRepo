@@ -1,4 +1,4 @@
-namespace MigrateToDW1
+namespace TimeCalculator
 {
     using System;
     using System.Collections.Generic;
@@ -41,27 +41,27 @@ namespace MigrateToDW1
         public virtual ICollection<Parameter> Parameters { get; set; }
 
 
-        public override bool Equals(object obj)
-        {
-            Timing_Option q = obj as Timing_Option;
-            return q != null && q.Name == this.Name
-                //&& q.Time == this.Time
-                && q.Timing_WorkStations == this.Timing_WorkStations
-                && q.Parameters.SequenceEqual(this.Parameters)
-                && q.Categories.SequenceEqual(this.Categories)
-                && q.Fixture == this.Fixture;
-             
-        }
+        //public override bool Equals(object obj)
+        //{
+        //    Timing_Option q = obj as Timing_Option;
+        //    return q != null && q.Name == this.Name
+        //        && q.Time == this.Time
+        //        && q.Timing_WorkStations == this.Timing_WorkStations
+        //        && q.Parameters.SequenceEqual(this.Parameters)
+        //        && q.Categories.SequenceEqual(this.Categories)
+        //        && q.Fixture == this.Fixture;
 
-        public override int GetHashCode()
-        {
-            return this.Name.GetHashCode() 
-                ^ this.Timing_WorkStations.GetHashCode() 
-                ^ Parameter.GetHashCode(this.Parameters)
-                ^ Category.GetHashCode(this.Categories)
-                //^ this.Time.GetHashCode() 
-                ^ this.Fixture.GetHashCode();
-        }
+        //}
+
+        //public override int GetHashCode()
+        //{
+        //    return this.Name.GetHashCode()
+        //        ^ this.Timing_WorkStations.GetHashCode()
+        //        //^ Parameter.GetHashCode(this.Parameters)
+        //        //^ Category.GetHashCode(this.Categories)
+        //        ^ this.Time.GetHashCode()
+        //        ^ this.Fixture.GetHashCode();
+        //}
 
 
     }

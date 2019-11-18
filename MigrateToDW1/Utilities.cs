@@ -1,13 +1,18 @@
-﻿using System;
+﻿using AXISAutomation.FixtureConfiguration;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MigrateToDW1
+namespace TimeCalculator
 {
     class Utilities
     {
+
+        public static List<Timing_Option> OptionList;
+
         public static int LengthID = 8;
         public static int SizeID = 20;
 
@@ -205,7 +210,7 @@ namespace MigrateToDW1
                 Timing_WorkStations = workStations
             };
 
-            Input.Categories.Add(Category);
+            //Input.Categories.Add(Category);
             Input.Parameters.Add(Parameter);
             return Input;
             
@@ -221,24 +226,29 @@ namespace MigrateToDW1
 
 
 
-        public static List<string> getLengthParams(string fixtureCode)
+        //public static List<string> getLengthParams(string fixtureCode)
+        //{
+        //    List<string> list = new List<string>();
+        //    using (var db = new DWModel())
+        //    {
+        //         list = (from fx in db.Fixtures
+        //                    join fica in db.CategoryAtFixtures on fx.id equals fica.FixtureId
+        //                    join cat in db.Categories on fica.CategoryId equals cat.id
+        //                    join paca in db.ParameterAtCategoryAtFixtures on fica.id equals paca.CategoryAtFixtureId
+        //                    join param in db.Parameters on paca.ParameterId equals param.id
+        //                    where fx.Code == fixtureCode && cat.id == LengthID
+        //                 select param.Code).ToList();
+        //    }
+        //    return list;
+        //}
+
+        public static List<Parameter> getLengthParams(string fixtureCode)
         {
-            List<string> list = new List<string>();
-            using (var db = new DWModel())
-            {
-                 list = (from fx in db.Fixtures
-                            join fica in db.CategoryAtFixtures on fx.id equals fica.FixtureId
-                            join cat in db.Categories on fica.CategoryId equals cat.id
-                            join paca in db.ParameterAtCategoryAtFixtures on fica.id equals paca.CategoryAtFixtureId
-                            join param in db.Parameters on paca.ParameterId equals param.id
-                            where fx.Code == fixtureCode && cat.id == LengthID
-                         select param.Code).ToList();
-            }
-            return list;
-        }
-        public static List<string> getSizeParams(string fixtureCode)
-        {
-            List<string> list = new List<string>();
+            List<Parameter> list = new List<Parameter>();
+            List<string> LengthParams = new List<string>()
+                {
+                    "4","8","12"
+                };
             using (var db = new DWModel())
             {
                 list = (from fx in db.Fixtures
@@ -246,8 +256,28 @@ namespace MigrateToDW1
                         join cat in db.Categories on fica.CategoryId equals cat.id
                         join paca in db.ParameterAtCategoryAtFixtures on fica.id equals paca.CategoryAtFixtureId
                         join param in db.Parameters on paca.ParameterId equals param.id
-                        where fx.Code == fixtureCode && cat.id == SizeID
-                        select param.Code).ToList();
+                        where fx.Code == fixtureCode && cat.id == LengthID && LengthParams.Contains(param.Code)
+                        select param).ToList();
+            }
+            return list;
+        }
+        public static List<Parameter> getSizeParams(string fixtureCode)
+        {
+            List<Parameter> list = new List<Parameter>();
+            List<string> SizeParams = new List<string>()
+                {
+
+                    "11","12","14","22","24","26","315","33","35","44"
+                };
+            using (var db = new DWModel())
+            {
+                list = (from fx in db.Fixtures
+                        join fica in db.CategoryAtFixtures on fx.id equals fica.FixtureId
+                        join cat in db.Categories on fica.CategoryId equals cat.id
+                        join paca in db.ParameterAtCategoryAtFixtures on fica.id equals paca.CategoryAtFixtureId
+                        join param in db.Parameters on paca.ParameterId equals param.id
+                        where fx.Code == fixtureCode && cat.id == SizeID && SizeParams.Contains(param.Code)
+                        select param).ToList();
             }
             return list;
         }
@@ -267,18 +297,25 @@ namespace MigrateToDW1
             {
                 var fixture = db.Fixtures.Where(r => r.Code == fixtureCode).FirstOrDefault();
                 var category = db.Categories.Where(r => r.id == LengthID).FirstOrDefault();
-
-                
-
-
                 List<string> LengthParams = new List<string>()
                 {
                     "4","8","12"
                 };
+
                 foreach (var wks in db.Timing_WorkStations.ToList()) {
-                    foreach (var param in db.Parameters.Where(r => LengthParams.Contains(r.Code)).ToList())
+                
+                    var paramlist = (from fx in db.Fixtures
+                                     join fica in db.CategoryAtFixtures on fx.id equals fica.FixtureId
+                                     join cat in db.Categories on fica.CategoryId equals cat.id
+                                     join paca in db.ParameterAtCategoryAtFixtures on fica.id equals paca.CategoryAtFixtureId
+                                     join param in db.Parameters on paca.ParameterId equals param.id
+                                     where fx.Code == fixtureCode && cat.id == LengthID && LengthParams.Contains(param.Code)
+                                     select param).ToList();
+                    foreach (var param in paramlist)
                     {
                         var newoption = addTimeOptionCustom(fixture, category, param, wks, "Standard",1);
+                        OptionList.Add(newoption);
+
                         db.Timing_Option.Add(newoption);
                         db.SaveChanges();
                     }
@@ -289,21 +326,30 @@ namespace MigrateToDW1
 
         public static void addSizeTimeOption(string fixtureCode)
         {
+            List<string> SizeParams = new List<string>()
+                {
+
+                    "11","12","14","22","24","26","315","33","35","44"
+                };
             using (var db = new DWModel())
             {
                 var fixture = db.Fixtures.Where(r => r.Code == fixtureCode).FirstOrDefault();
                 var category = db.Categories.Where(r => r.id == SizeID).FirstOrDefault();
-
-                List<string> SizeParams = new List<string>()
-                {
-                   
-                    "11","12","14","22","24","26","315","33","35","44"
-                };
+                //category.Footnote = " ";
+                
                 foreach (var wks in db.Timing_WorkStations.ToList())
                 {
-                    foreach (var param in db.Parameters.Where(r => SizeParams.Contains(r.Code)).ToList())
+                    var paramList =  (from fx in db.Fixtures
+                                            join fica in db.CategoryAtFixtures on fx.id equals fica.FixtureId
+                                            join cat in db.Categories on fica.CategoryId equals cat.id
+                                            join paca in db.ParameterAtCategoryAtFixtures on fica.id equals paca.CategoryAtFixtureId
+                                            join param in db.Parameters on paca.ParameterId equals param.id
+                                            where fx.Code == fixtureCode && cat.id == SizeID && SizeParams.Contains(param.Code)
+                                            select param).ToList();
+                    foreach (var param in paramList)
                     {
                         var newoption = addTimeOptionCustom(fixture, category, param, wks, "Standard", 1);
+                        OptionList.Add(newoption);
                         db.Timing_Option.Add(newoption);
                         db.SaveChanges();
                     }
@@ -314,30 +360,101 @@ namespace MigrateToDW1
         }
 
 
+
+        public static Timing_Option ContainsTimeOption(Fixture fixture, Timing_Option timing_Option)
+        {
+
+
+
+            var result = fixture.Timing_Option.Where(r => r.Name == timing_Option.Name
+                && r.Categories.Equals(timing_Option.Categories)
+                && r.Parameters.Equals(timing_Option.Parameters)
+                && r.Fixture == timing_Option.Fixture
+                && r.Timing_WorkStations == timing_Option.Timing_WorkStations).FirstOrDefault();
+
+
+            return result;
+        }
+
+      
+
+
+
         public static void UploadStandardTime()
         {
+
+            List<string> listA = new List<string>();
+            using (var reader = new StreamReader(@"C:\Users\dangl\source\repos\MigrateToDW\TimeCalculator\ProductEpicor.csv"))
+            {
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(';');
+                    listA.Add(values[0]);
+
+                }
+            }
+
+
+                OptionList = new List<Timing_Option>();
             using (var db = new DWModel())
             {
+                
                 foreach (var fixture in db.Fixtures.ToList())
                 {
-                    var lengthParam = Utilities.getLengthParams(fixture.Code);
-                    var sizeParam = Utilities.getSizeParams(fixture.Code);
-                    if (lengthParam.Count > 0)
+                    if (listA.Contains(fixture.Code))
                     {
-                        Utilities.addLengthTimeOption(fixture.Code);
-                    }
-                    else if (sizeParam.Count > 0)
-                    {
-                        Utilities.addSizeTimeOption(fixture.Code);
-                    }
-                    else
-                    {
-                        Console.WriteLine("{0} does not have size or legnth param", fixture.Code);
+
+                        Console.WriteLine(fixture.Code);
+                        if (Utilities.getLengthParams(fixture.Code).Count > 0)
+                        {
+                            Utilities.addLengthTimeOption(fixture.Code);
+                        }
+                        else if (Utilities.getSizeParams(fixture.Code).Count > 0)
+                        {
+                            Utilities.addSizeTimeOption(fixture.Code);
+                        }
+                        else
+                        {
+                            Console.WriteLine("{0} does not have size or legnth param", fixture.Code);
+                        }
                     }
 
                 }
             }
+
+            //before your loop
+            var csv = new StringBuilder();
+            
+            csv.AppendLine("FamilyName,Fixture, WorkStation, Length, Time");
+            foreach (var item in OptionList)
+            {
+                if (listA.Contains(item.Fixture.Code))
+                {
+                    var newLine = string.Format("{0},{1},{2},{3}",item.Fixture.FamilyName, item.Fixture.Code,
+                        item.Timing_WorkStations.Name, item.Parameters.FirstOrDefault().Description);
+                    csv.AppendLine(newLine);
+                }
+            }
+            string filepath = @"C:\Users\dangl\source\repos\MigrateToDW\TimeCalculator\Input.csv";
+            File.WriteAllText(filepath, csv.ToString());
+
         }
 
+
+
+
+        public static AXISAutomation.FixtureConfiguration._Fixture ConfigDW(string lineDesc)
+        {
+            string DWConnectiontring = "metadata = res://*/DBConnection.csdl|res://*/DBConnection.ssdl|res://*/DBConnection.msl;provider=System.Data.SqlClient;provider connection string='Data Source=VAULT\\DRIVEWORKS;Initial Catalog=\"AXIS Automation\";Integrated Security=True;MultipleActiveResultSets=True'";
+            using (AXISAutomation.Tools.DBConnection.AXIS_AutomationEntities _AutomationEntities = new AXISAutomation.Tools.DBConnection.AXIS_AutomationEntities(DWConnectiontring))
+            {
+                _Fixture fixture = new AXISAutomation.FixtureConfiguration._Fixture(lineDesc, _AutomationEntities);
+
+                fixture.SPM.ConfigureAll();
+
+                return fixture;
+            }
+        }
     }
 }
