@@ -43,6 +43,12 @@ Generated\ Files/
 *.VisualState.xml
 TestResult.xml
 
+# Data Files
+*.csv
+*.xlsx
+
+
+
 # Build Results of an ATL Project
 [Dd]ebugPS/
 [Rr]eleasePS/
@@ -338,3 +344,5 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/ProductionTimeInput
+/ProductionTimeIO

@@ -24,7 +24,7 @@ namespace TimeCalculator
         [StringLength(10)]
         public string Name { get; set; }
 
-        public double Time { get; set; }
+        public decimal Time { get; set; }
 
         public int FixtureID { get; set; }
 

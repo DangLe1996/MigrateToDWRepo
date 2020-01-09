@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis-TimeCalculator", "MigrateToDW1\Axis-TimeCalculator.csproj", "{E3C8E5F1-D75C-40B7-81C0-B19146AB5A88}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductionTimeInput", "ProductionTimeInput\ProductionTimeInput.csproj", "{02F9DC68-C4CA-4033-B727-A7BE18A15A30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{E3C8E5F1-D75C-40B7-81C0-B19146AB5A88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3C8E5F1-D75C-40B7-81C0-B19146AB5A88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3C8E5F1-D75C-40B7-81C0-B19146AB5A88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02F9DC68-C4CA-4033-B727-A7BE18A15A30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02F9DC68-C4CA-4033-B727-A7BE18A15A30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02F9DC68-C4CA-4033-B727-A7BE18A15A30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02F9DC68-C4CA-4033-B727-A7BE18A15A30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

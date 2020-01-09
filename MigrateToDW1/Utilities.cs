@@ -16,6 +16,15 @@ namespace TimeCalculator
         public static int LengthID = 8;
         public static int SizeID = 20;
 
+
+     
+
+
+
+
+
+
+
         public static void addWorkstations()
         {
             using (var db = new SSRS())
@@ -46,19 +55,7 @@ namespace TimeCalculator
             }
         }
 
-        public static void Test()
-        {
-            using (var DWdb = new DWModel())
-            {
-                var optionlist = DWdb.Timing_Option.ToList();
-                var fixture = DWdb.Fixtures.FirstOrDefault();
-                var test = fixture.CategoryAtFixtures.Where(r => r.Category.Name == "CIRCUITS").FirstOrDefault();
-                var test2 = test.ParameterAtCategoryAtFixtures.Where(r => r.Parameter.Code == "1").FirstOrDefault();
-                var param = DWdb.Parameters.FirstOrDefault();
-                
-            }
-
-        }
+     
 
         public static void LinkParams()
         {
@@ -97,7 +94,7 @@ namespace TimeCalculator
                 }
 
             }
-            
+
         }
 
         public static void LinkCategory()
@@ -152,7 +149,7 @@ namespace TimeCalculator
                                 var optnew = new Timing_Option()
                                 {
                                     Name = opt.OptionName,
-                                    Time = opt.ProdTime,
+                                    Time = (decimal)opt.ProdTime,
                                     Fixture = fixture,
 
                                     Timing_WorkStations = workstation
@@ -179,11 +176,9 @@ namespace TimeCalculator
 
         }
 
-        public static Timing_Option addTimeOptionCustom(Fixture fixture, List<Category> Categories, List<Parameter> Parameters, Timing_WorkStations workStations, string OptionName, double OptionValue)
+        public static Timing_Option addTimeOptionCustom(Fixture fixture, List<Category> Categories, List<Parameter> Parameters, Timing_WorkStations workStations, string OptionName, decimal OptionValue)
         {
 
-
-           
 
             Timing_Option Input = new Timing_Option()
             {
@@ -193,14 +188,14 @@ namespace TimeCalculator
                 Categories = Categories,
                 Parameters = Parameters,
                 Timing_WorkStations = workStations
-                
+
             };
 
             return Input;
-          
+
         }
 
-        public static Timing_Option addTimeOptionCustom(Fixture fixture, Category Category, Parameter Parameter, Timing_WorkStations workStations, string OptionName, double OptionValue)
+        public static Timing_Option addTimeOptionCustom(Fixture fixture, Category Category, Parameter Parameter, Timing_WorkStations workStations, string OptionName, decimal OptionValue)
         {
             Timing_Option Input = new Timing_Option()
             {
@@ -213,7 +208,7 @@ namespace TimeCalculator
             //Input.Categories.Add(Category);
             Input.Parameters.Add(Parameter);
             return Input;
-            
+
         }
 
         public static List<Timing_Option> GetTiming_Options()
@@ -285,10 +280,8 @@ namespace TimeCalculator
 
         public void addTimeOption(string fixtureCode, List<string> CategoryCode, List<string> ParamsCode, string WorkCenter, string Name, double TimeValue)
         {
-           
+
         }
-
-
 
 
         public static void addLengthTimeOption(string fixtureCode)
@@ -302,8 +295,9 @@ namespace TimeCalculator
                     "4","8","12"
                 };
 
-                foreach (var wks in db.Timing_WorkStations.ToList()) {
-                
+                foreach (var wks in db.Timing_WorkStations.ToList())
+                {
+
                     var paramlist = (from fx in db.Fixtures
                                      join fica in db.CategoryAtFixtures on fx.id equals fica.FixtureId
                                      join cat in db.Categories on fica.CategoryId equals cat.id
@@ -313,7 +307,7 @@ namespace TimeCalculator
                                      select param).ToList();
                     foreach (var param in paramlist)
                     {
-                        var newoption = addTimeOptionCustom(fixture, category, param, wks, "Standard",1);
+                        var newoption = addTimeOptionCustom(fixture, category, param, wks, "Standard", 1);
                         OptionList.Add(newoption);
 
                         db.Timing_Option.Add(newoption);
@@ -336,16 +330,16 @@ namespace TimeCalculator
                 var fixture = db.Fixtures.Where(r => r.Code == fixtureCode).FirstOrDefault();
                 var category = db.Categories.Where(r => r.id == SizeID).FirstOrDefault();
                 //category.Footnote = " ";
-                
+
                 foreach (var wks in db.Timing_WorkStations.ToList())
                 {
-                    var paramList =  (from fx in db.Fixtures
-                                            join fica in db.CategoryAtFixtures on fx.id equals fica.FixtureId
-                                            join cat in db.Categories on fica.CategoryId equals cat.id
-                                            join paca in db.ParameterAtCategoryAtFixtures on fica.id equals paca.CategoryAtFixtureId
-                                            join param in db.Parameters on paca.ParameterId equals param.id
-                                            where fx.Code == fixtureCode && cat.id == SizeID && SizeParams.Contains(param.Code)
-                                            select param).ToList();
+                    var paramList = (from fx in db.Fixtures
+                                     join fica in db.CategoryAtFixtures on fx.id equals fica.FixtureId
+                                     join cat in db.Categories on fica.CategoryId equals cat.id
+                                     join paca in db.ParameterAtCategoryAtFixtures on fica.id equals paca.CategoryAtFixtureId
+                                     join param in db.Parameters on paca.ParameterId equals param.id
+                                     where fx.Code == fixtureCode && cat.id == SizeID && SizeParams.Contains(param.Code)
+                                     select param).ToList();
                     foreach (var param in paramList)
                     {
                         var newoption = addTimeOptionCustom(fixture, category, param, wks, "Standard", 1);
@@ -376,9 +370,6 @@ namespace TimeCalculator
             return result;
         }
 
-      
-
-
 
         public static void UploadStandardTime()
         {
@@ -396,10 +387,10 @@ namespace TimeCalculator
             }
 
 
-                OptionList = new List<Timing_Option>();
+            OptionList = new List<Timing_Option>();
             using (var db = new DWModel())
             {
-                
+
                 foreach (var fixture in db.Fixtures.ToList())
                 {
                     if (listA.Contains(fixture.Code))
@@ -425,13 +416,13 @@ namespace TimeCalculator
 
             //before your loop
             var csv = new StringBuilder();
-            
+
             csv.AppendLine("FamilyName,Fixture, WorkStation, Length, Time");
             foreach (var item in OptionList)
             {
                 if (listA.Contains(item.Fixture.Code))
                 {
-                    var newLine = string.Format("{0},{1},{2},{3}",item.Fixture.FamilyName, item.Fixture.Code,
+                    var newLine = string.Format("{0},{1},{2},{3}", item.Fixture.FamilyName, item.Fixture.Code,
                         item.Timing_WorkStations.Name, item.Parameters.FirstOrDefault().Description);
                     csv.AppendLine(newLine);
                 }
@@ -444,16 +435,64 @@ namespace TimeCalculator
 
 
 
-        public static AXISAutomation.FixtureConfiguration._Fixture ConfigDW(string lineDesc)
+  
+
+        public static void updateTime()
         {
-            string DWConnectiontring = "metadata = res://*/DBConnection.csdl|res://*/DBConnection.ssdl|res://*/DBConnection.msl;provider=System.Data.SqlClient;provider connection string='Data Source=VAULT\\DRIVEWORKS;Initial Catalog=\"AXIS Automation\";Integrated Security=True;MultipleActiveResultSets=True'";
-            using (AXISAutomation.Tools.DBConnection.AXIS_AutomationEntities _AutomationEntities = new AXISAutomation.Tools.DBConnection.AXIS_AutomationEntities(DWConnectiontring))
+            using (var db = new DWModel())
             {
-                _Fixture fixture = new AXISAutomation.FixtureConfiguration._Fixture(lineDesc, _AutomationEntities);
+                var inputfile = new List<string>()
+                {
+                    @"C:\Users\dangl\source\repos\MigrateToDW\MigrateToDW1\Claudine's Time\Copy of Final Packaging.csv",
+                    @"C:\Users\dangl\source\repos\MigrateToDW\MigrateToDW1\Claudine's Time\SawExt.csv",
+                    @"C:\Users\dangl\source\repos\MigrateToDW\MigrateToDW1\Claudine's Time\Time _welding.csv",
+                    @"C:\Users\dangl\source\repos\MigrateToDW\MigrateToDW1\Claudine's Time\TimeLenses.csv",
+                    @"C:\Users\dangl\source\repos\MigrateToDW\MigrateToDW1\Claudine's Time\DANG Time _ wire cutV2.csv",
+                    @"C:\Users\dangl\source\repos\MigrateToDW\MigrateToDW1\Claudine's Time\DANG Time _ punch.csv"
+                };
+                
+                foreach (var item in inputfile)
+                {
 
-                fixture.SPM.ConfigureAll();
 
-                return fixture;
+                    using (var reader = new StreamReader(item))
+                    {
+                        while (!reader.EndOfStream)
+                        {
+                            decimal num = 0;
+                            bool isDouble = false;
+                            var line = reader.ReadLine();
+                            var values = line.Split(',');
+                            try
+                            {
+                                isDouble = decimal.TryParse(values[4], out num);
+                                var productID = values[1];
+                                var lengthDesc = values[3];
+                                var workstation = values[2];
+                                if (isDouble)
+                                {
+
+                                    var option = db.Timing_Option.Where(r => r.Fixture.Code == productID
+                                                                && r.Name == "Standard"
+                                                                && r.Parameters.Any(t => t.Description == lengthDesc)
+                                                                && r.Timing_WorkStations.Name == workstation).FirstOrDefault();
+
+                                    option.Time = num;
+                                    var cat = option.Parameters.FirstOrDefault().ParameterAtCategoryAtFixtures.FirstOrDefault().CategoryAtFixture.Category;
+                                    option.Categories.Clear();
+                                    option.Categories.Add(cat);
+                                    db.SaveChanges();
+                                }
+                            }
+                            catch(Exception e)
+                            {
+                                Console.WriteLine(e.Message);
+                                continue;
+                            }
+
+                        }
+                    }
+                }
             }
         }
     }

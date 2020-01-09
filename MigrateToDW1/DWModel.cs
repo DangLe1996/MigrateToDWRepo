@@ -11,6 +11,11 @@ namespace TimeCalculator
             : base("name=DWModel2")
         {
         }
+        public DWModel(bool useDefault = true)
+        {
+           
+            this.Database.Connection.ConnectionString = @"data source=VAULT\DRIVEWORKS;initial catalog=AXIS Automation;;persist security info=True;user id=epicoradmin;password=Ep1c0r4Life!;MultipleActiveResultSets=True;App=EntityFramework";
+        }
 
         public virtual DbSet<Timing_Option> Timing_Option { get; set; }
         public virtual DbSet<Timing_WorkStations> Timing_WorkStations { get; set; }

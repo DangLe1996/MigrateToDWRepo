@@ -13,10 +13,12 @@ namespace TimeCalculator
         static void Main(string[] args)
         {
 
+            //Utilities.updateTime();
 
             //Utilities.UploadStandardTime();
 
-            string lineDesc = "BBLED2-SL-500-750-90-30-SO-22'-W-UNV-DP-2-CA(36)";
+            string lineDesc = "BBRLED-1000-80-35-RG-35'-W-UNV-DP-1-DF";
+            lineDesc = "SKPLED-22-4000-80-35-0.5-W-UNV-DP-1-TB9";
             string DWConnectiontring = "metadata = res://*/DBConnection.csdl|res://*/DBConnection.ssdl|res://*/DBConnection.msl;provider=System.Data.SqlClient;provider connection string='Data Source=VAULT\\DRIVEWORKS;Initial Catalog=\"AXIS Automation\";Integrated Security=True;MultipleActiveResultSets=True'";
 
             using (AXISAutomation.Tools.DBConnection.AXIS_AutomationEntities _AutomationEntities = new AXISAutomation.Tools.DBConnection.AXIS_AutomationEntities(DWConnectiontring))
@@ -24,11 +26,28 @@ namespace TimeCalculator
                 _Fixture fixture = new AXISAutomation.FixtureConfiguration._Fixture(lineDesc, _AutomationEntities);
 
                 fixture.SPM.ConfigureAll();
-                var Time = new TimeCalculator(fixture,3);
+                var Time = new TimeCalculator(fixture,4);
 
             }
-            
-            
+
+            using (var db = new DWModel())
+            {
+                //string codeid = "BBRLED";
+                //string optionName = "Standard";
+                //string workStation = "Cutting Extrusion";
+                //string CategoryName = "Length";
+                //string parameter = "8";
+
+                //var time = db.Timing_Option.First(r => r.Fixture.Code == codeid
+                //&& r.Name == optionName && r.Timing_WorkStations.Name == workStation
+                //&& r.Categories.Any( t => t.Name == CategoryName) 
+                //&& r.Parameters.Any(e => e.Code == parameter));
+
+                //int optionID = 72636;
+                //var time2 = db.Timing_Option.Where(r => r.OptionID == optionID).FirstOrDefault();
+                //time2.Time = (decimal)1.40;
+                //db.SaveChanges();
+            }
 
 
         }
